@@ -1,7 +1,9 @@
+#create random generator
 resource "random_id" "log_analitics" {
   byte_length = 8
 }
 
+#Create loganalytics workspace
 resource "azurerm_log_analytics_workspace" "k8s" {
   name                = "${var.loganalytics_workspace_name}-${random_id.log_analitics.dec}"
   location            = var.loganalytics_workspace_location
@@ -23,6 +25,8 @@ resource "azurerm_log_analytics_solution" "k8s" {
 
 }
 
+
+#Create AKS cluster
 resource "azurerm_kubernetes_cluster" "k8s" {
   name                = var.cluster_name
   resource_group_name = azurerm_resource_group.tfstate.name
@@ -45,7 +49,7 @@ resource "azurerm_kubernetes_cluster" "k8s" {
     client_secret = var.aks_service_principal_client_secret
   }
 
-
+#Setup monitoring
   oms_agent {
     log_analytics_workspace_id = azurerm_log_analytics_workspace.k8s.id
   }
