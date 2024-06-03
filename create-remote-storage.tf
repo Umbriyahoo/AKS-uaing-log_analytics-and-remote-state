@@ -9,6 +9,8 @@ resource "azurerm_resource_group" "tfstate" {
   location = "East US"
 }
 
+
+#create remote state, coment all below if you won't use remote state
 resource "azurerm_storage_account" "tfstate" {
   name                            = "tfstate${random_string.resource_code.result}"
   resource_group_name             = azurerm_resource_group.tfstate.name
